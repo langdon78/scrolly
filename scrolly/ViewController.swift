@@ -20,18 +20,27 @@ class ViewController: UIViewController {
     @IBOutlet weak var greetingButton: UIButton!
     @IBOutlet weak var someDataLabel: UILabel!
     @IBOutlet weak var collapseableViewHeight: NSLayoutConstraint!
-    @IBOutlet var menuItems: [UIView]!
-    @IBOutlet weak var labelLead: NSLayoutConstraint!
+    @IBOutlet var menuItems: [UIView]! {
+        didSet {
+            menuItems.forEach {
+                $0.layer.cornerRadius = 10.0
+            }
+        }
+    }
+    @IBOutlet weak var bankTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bankLabel: UILabel!
     
     //MARK: Constants
-    static let maxLabelLead: CGFloat = 300
-    static let minLabelLead: CGFloat = 40
+    static let bankFontSizeStart: CGFloat = 60
+    static let bankFontSizeEnd: CGFloat = 30
+    static let bankLabelStart: CGFloat = 100
+    static let bankLabelEnd: CGFloat = 10
     static let maxImageHeight: CGFloat = 320
     static let minImageHeight: CGFloat = 80
     static let maxCollapseableViewHeight: CGFloat = 560
     static let minCollapseableViewHeight: CGFloat = 80
-    static var menuFadeOutStart: CGFloat = maxCollapseableViewHeight - 80
-    static var menuFadeOutEnd: CGFloat = maxImageHeight
+    static var menuFadeOutStart: CGFloat = maxCollapseableViewHeight
+    static var menuFadeOutEnd: CGFloat = maxImageHeight + 20
     static let greetingFadeStart: CGFloat = 280
     static let greetingFadeEnd: CGFloat = 200
     static let offsetKey = "offset"
@@ -50,9 +59,9 @@ class ViewController: UIViewController {
             self.menuItems.forEach { $0.alpha = self.menuFade(self.collapseableViewTrack) }
         }
     }
-    var labelTrack = Track(start: maxLabelLead, finish: minLabelLead) {
+    var bankTrack = Track(start: bankLabelStart, finish: bankLabelEnd) {
         didSet {
-            labelLead.constant = labelTrack.relativeLocation
+            bankTopConstraint.constant = bankTrack.relativeLocation
         }
     }
     
@@ -100,8 +109,12 @@ class ViewController: UIViewController {
         collapseableViewTrack.updateCurrentLocation(with: updatedCollapseableViewHeight)
         imageTrack.updateCurrentLocation(with: updatedCollapseableViewHeight)
         
-        let labelTrackPosition = imageTrack.relocateProportionately(to: labelTrack.interval)
-        labelTrack.updateCurrentLocation(with: labelTrackPosition)
+        let bankLabelTop = imageTrack.relocateProportionately(to: bankTrack.interval)
+        bankTrack.updateCurrentLocation(with: bankLabelTop)
+        
+        let fontInterval = Track.Interval(start: Self.bankFontSizeStart, finish: Self.bankFontSizeEnd)
+        let bankFontSize = imageTrack.relocateProportionately(to: fontInterval)
+        bankLabel.font = bankLabel.font.withSize(bankFontSize)
         
         executeTrackActions()
     }
@@ -180,15 +193,17 @@ extension ViewController {
     func snap(to top: Bool) {
         let imageHeight = top ? Self.minImageHeight : Self.maxImageHeight
         let collapseableViewHeight = top ? Self.minCollapseableViewHeight : Self.maxCollapseableViewHeight
-        let labelLead = top ? Self.minLabelLead : Self.maxLabelLead
         let menuFade: CGFloat = top ? 0.0 : 1.0
         let greetingFade: CGFloat = top ? 1.0 : 0.0
+        let bankTop: CGFloat = top ? Self.bankLabelEnd : Self.bankLabelStart
+        let bankFontSize: CGFloat = top ? Self.bankFontSizeEnd : Self.bankFontSizeStart
         
         UIView.animate(withDuration: 0.25) {
             self.imageHeightConstraint.constant = imageHeight
             self.collapseableViewHeight.constant = collapseableViewHeight
-            self.labelLead.constant = labelLead
             self.isScrollable = top
+            self.bankLabel.font = self.bankLabel.font.withSize(bankFontSize)
+            self.bankTopConstraint.constant = bankTop
             self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
             self.view.layoutIfNeeded()
         }
