@@ -8,25 +8,25 @@
 
 import Foundation
 
-typealias Locator<Point: BinaryFloatingPoint> = (Track<Point>.Interval) -> Point
-typealias Movement<Point: BinaryFloatingPoint> = (Track<Point>) -> Locator<Point>
+public typealias Locator<Point: BinaryFloatingPoint> = (Track<Point>.Interval) -> Point
+public typealias Movement<Point: BinaryFloatingPoint> = (Track<Point>) -> Locator<Point>
 
-struct Track<Point: BinaryFloatingPoint> {
-    var currentLocation: Point
-    var interval: Interval
+public struct Track<Point: BinaryFloatingPoint> {
+    public var currentLocation: Point
+    public var interval: Interval
     
-    init(currentLocation: Point = 0.0, interval: Interval) {
+    public init(currentLocation: Point = 0.0, interval: Interval) {
         self.currentLocation = currentLocation
         self.interval = interval
     }
     
-    init(currentLocation: Point = 0.0, start: Point, finish: Point) {
+    public init(currentLocation: Point = 0.0, start: Point, finish: Point) {
         self.init(currentLocation: currentLocation, interval: Interval(start: start, finish: finish))
     }
 }
 
 //MARK: - Data structures
-extension Track {
+public extension Track {
     
     enum RelativePosition {
         case before
@@ -35,36 +35,41 @@ extension Track {
     }
 
     struct Interval {
-        var start: Point
-        var finish: Point
+        public var start: Point
+        public var finish: Point
         
-        var distance: Point {
+        public var distance: Point {
             return max - min
         }
-        var singular: Bool {
+        public var singular: Bool {
             start == finish
         }
-        var increasing: Bool {
+        public var increasing: Bool {
             finish > start
         }
-        var decreasing: Bool {
+        public var decreasing: Bool {
             finish < start
         }
-        var min: Point {
+        public var min: Point {
             increasing ? start : finish
         }
-        var max: Point {
+        public var max: Point {
             increasing ? finish : start
         }
-        var mid: Point {
+        public var mid: Point {
             distance / 2
+        }
+        
+        public init(start: Point, finish: Point) {
+            self.start = start
+            self.finish = finish
         }
     }
     
 }
 
 //MARK: - Computed properties
-extension Track {
+public extension Track {
     
     var position: RelativePosition {
         if increasing ? currentLocation < interval.min : currentLocation > interval.max {
@@ -99,7 +104,7 @@ extension Track {
 }
 
 //MARK: - Location and conversion
-extension Track {
+public extension Track {
     
     static func locate(_ currentLocation: Point, in interval: Interval) -> Point {
         let transition = Track(currentLocation: currentLocation, interval: interval)
@@ -129,7 +134,7 @@ extension Track {
 }
 
 //MARK: - Action handlers
-extension Track {
+public extension Track {
     
     func execute(before: (() -> Void)? = nil, after: (() -> Void)? = nil, during: (() -> Void)? = nil) {
         switch position {
@@ -163,7 +168,7 @@ extension Track {
 }
 
 //MARK: - Fading
-extension Track {
+public extension Track {
     
     static func applyFadeIn(from start: Point, to finish: Point) -> (Self) -> Point {
         return { transition in

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Track
 
 let scrollNotification = Notification.Name(rawValue: "scrolly")
 let stopNotification = Notification.Name(rawValue: "stop")
