@@ -57,6 +57,7 @@
 		BCE0EF9D24B7D42900B68AAD /* Track.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Track.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE0EF9F24B7D42900B68AAD /* Track.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		BCE0EFA024B7D42900B68AAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BCE36F1024B88D250068B39C /* TableView.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = TableView.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 		BCDBA047247DF908008619C7 = {
 			isa = PBXGroup;
 			children = (
+				BCE36F1024B88D250068B39C /* TableView.playground */,
 				BCE0EF9724B7D30500B68AAD /* track.playground */,
 				BCDBA052247DF908008619C7 /* scrolly */,
 				BCE0EF9E24B7D42900B68AAD /* Track */,

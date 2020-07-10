@@ -3,7 +3,7 @@ import Track
 
 func display(track: Track<Double>) {
     print("-----------------------------")
-    print("Current Interval: \(track.interval.start) to \(aTrack.interval.finish)")
+    print("Current Interval: \(track.interval.start) to \(track.interval.finish)")
     print("Current Location: \(track.currentLocation)")
     print("Relative Position: \(track.position)")
     print("Relative Location: \(track.relativeLocation)")
@@ -18,6 +18,8 @@ nextInterval.increasing
 nextInterval.decreasing
 nextInterval.mid
 nextInterval.distance
+nextInterval.start
+nextInterval.max
 /*:
 ## Track
 #### A data structure representing a linear relationship between a point and two other points (interval)
